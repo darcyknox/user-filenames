@@ -11,4 +11,4 @@ directory structure, assembles a list of files to be read in sequential order, r
 HOW TO RUN:
 
 To run the program, first compile the program with the command "javac UserFilenames.java" without quotation marks.
-Next, run the program with the command "java UserFilenames <directory name>" without quotation marks or pointy brackets, and where the text inside the ponty rackets are replaced with a directory name.
+Next, run the program with the command "java UserFilenames directory-name" without quotation marks, and where directory-name is replaced with the name of a directory.
