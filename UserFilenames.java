@@ -1,7 +1,12 @@
 import java.util.*;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 
 public class UserFilenames {
+
+  public static ArrayList<FileContents> files = new ArrayList<FileContents>();
 
   public static void dfsFiles(File rootDir) {
     File[] dir = rootDir.listFiles();
@@ -9,7 +14,8 @@ public class UserFilenames {
       if (f.isDirectory()) {
         dfsFiles(f);
       } else {
-        System.out.println(f.getName());
+        FileContents fileInstance = new FileContents(f.getName(), f.toString());
+        files.add(fileInstance);
       }
     }
   }
@@ -39,6 +45,26 @@ public class UserFilenames {
 
     dfsFiles(root);
 
+    for (FileContents f: files) {
+      System.out.println(f.filename);
+      System.out.println(f.path);
+    }
+
+
+
+
+  }
+
+  private static class FileContents {
+
+    public String filename;
+    public Path path;
+
+
+    public FileContents(String filename, String pathString) {
+      this.filename = filename;
+      this.path = Paths.get(pathString);
+    }
   }
 
 }
