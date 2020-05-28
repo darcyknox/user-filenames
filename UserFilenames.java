@@ -46,6 +46,11 @@ public class UserFilenames {
     dfsFiles(root);
 
     for (FileContents f: files) {
+      String[] split = f.filename.toString().split("-");
+      if (split.length != 3) {
+        System.out.println("Invalid: Numbers in file name must be separated by 2 hyphens.");
+        return;
+      }
       System.out.println(f.filename);
       System.out.println(f.path);
     }
