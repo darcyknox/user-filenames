@@ -35,7 +35,7 @@ public class UserFilenames {
      */
     /*
      * Scanner scan = null;
-     * 
+     *
      * try { scan = new Scanner(new FileInputStream(args[0])); } catch
      * (FileNotFoundException e) { System.out.println("Invalid: No input");
      * System.exit(0); }
@@ -62,7 +62,7 @@ public class UserFilenames {
       }
 
       //System.out.println(suffix);
-      
+
       if (suffix.toString() != "txt.") {
         System.out.println("Invalid: files must be .txt files/file names must end in .txt");
       }
@@ -85,21 +85,54 @@ public class UserFilenames {
 
     System.out.println();
 
+    System.out.println("");
+
     for (FileContents f : files) {
       System.out.println(f.filename);
       System.out.println(f.path);
     }
 
+    System.out.println();
+
+    for (FileContents f : files) {
+      try (BufferedReader br = new BufferedReader(new FileReader(f.pathString))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+         System.out.println(line);
+        }
+      } catch (IOException i) {
+        System.out.println("error");
+        System.exit(0);
+      }
+    }
+
+
+
   }
+
+  /*
+  public static void printContents(ArrayList<FileContents> fileList) throws IOException {
+    for (FileContents f : fileList) {
+      try (BufferedReader br = new BufferedReader(new FileReader(f.pathString))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+         System.out.println(line);
+        }
+      }
+    }
+  }
+  */
 
   private static class FileContents {
 
     public String filename;
     public Path path;
+    public String pathString;
 
     public FileContents(String filename, String pathString) {
       this.filename = filename;
       this.path = Paths.get(pathString);
+      this.pathString = pathString;
     }
   }
 
