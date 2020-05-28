@@ -3,6 +3,8 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
 
 public class UserFilenames {
 
@@ -20,7 +22,7 @@ public class UserFilenames {
     }
   }
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) throws ParseException {
 
     System.out.println(args[0]);
 
@@ -45,6 +47,7 @@ public class UserFilenames {
 
     dfsFiles(root);
 
+
     for (FileContents f: files) {
       String[] split = f.filename.toString().split("-");
       if (split.length != 3) {
@@ -55,10 +58,20 @@ public class UserFilenames {
       System.out.println(f.path);
     }
 
+    Comparator<FileContents> compareByFileName = (FileContents f1, FileContents f2) -> f1.filename.compareTo(f2.filename);
 
+    Collections.sort(files, compareByFileName);
+
+    System.out.println();
+
+    for (FileContents f: files) {
+      System.out.println(f.filename);
+      System.out.println(f.path);
+    }
 
 
   }
+
 
   private static class FileContents {
 
