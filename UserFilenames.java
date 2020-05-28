@@ -43,6 +43,11 @@ public class UserFilenames {
 
     dfsFiles(root);
 
+    int k = 1;
+    int prevJobSite = -1;
+    int prevLabDesk = -1;
+    int prevJobNumber = -1;
+
     for (FileContents f : files) {
 
       String[] split = f.filename.toString().split("-");
@@ -62,6 +67,13 @@ public class UserFilenames {
       }
 
       //System.out.println(suffix);
+      //System.out.println("Here");
+      //System.out.println(Arrays.toString(split));
+      //System.out.println(split[2].replace(".txt", ""));
+
+      int jobSite = Integer.parseInt(split[0]);
+      int labDesk = Integer.parseInt(split[1]);
+      int jobNumber = Integer.parseInt(split[2].replace(".txt", ""));
 
       if (suffix.toString() != "txt.") {
         System.out.println("Invalid: files must be .txt files/file names must end in .txt");
@@ -72,7 +84,33 @@ public class UserFilenames {
         System.out.println("Invaild: lab desk must be from 01 - 25");
       } else if (!match3) {
         System.out.println("Invaild: job number must be from 01 - 99");
+      } /*else if (jobNumber != k) {
+        System.out.println("Invalid: Non-sequential job number");
+      }*/
+
+      // THIS NEEDS TO BE DONE AFTER SORTING
+      if (prevJobSite == -1 && prevLabDesk == -1 && prevJobNumber == -1) {
+        prevJobSite = jobSite;
+        prevLabDesk = labDesk;
+        prevJobNumber = jobNumber;
+      } else {
+        if (jobSite == prevJobSite && labDesk == prevLabDesk) { // if jobSite and labDesk haven't changed
+          if (jobNumber != prevJobNumber + 1) { // if jobNumber is out of sequence
+            System.out.println("Invalid: Non-sequential job number");
+          }
+        } else { // if jobSite and labDesk have changed
+          if (jobNumber != 1) { // jobSite must be 1 to be valid
+            System.out.println("Invalid: Non-sequential job number");
+          }
+        }
+        prevJobSite = jobSite;
+        prevLabDesk = labDesk;
+        prevJobNumber = jobNumber;
       }
+
+      k++;
+
+
 
       System.out.println(f.filename);
       System.out.println(f.path);
@@ -100,7 +138,7 @@ public class UserFilenames {
         while ((line = br.readLine()) != null) {
          System.out.println(line);
         }
-      } catch (IOException i) {
+      } catch (IOException e) {
         System.out.println("error");
         System.exit(0);
       }
