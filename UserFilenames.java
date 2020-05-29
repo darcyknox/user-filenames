@@ -63,7 +63,7 @@ public class UserFilenames {
         suffix.append(nameSplit[i]);
       }   
 
-      System.out.println(suffix.toString());
+      //System.out.println(suffix.toString());
       //System.out.println("Here");
       //System.out.println(Arrays.toString(split));
       //System.out.println(split[2].replace(".txt", ""));
