@@ -173,7 +173,7 @@ public class UserFilenames {
     public Path path;
     public String pathString;
 
-    public FileContents(String filename, String pathString, ) {
+    public FileContents(String filename, String pathString) {
       this.filename = filename;
       this.path = Paths.get(pathString);
       this.pathString = pathString;
