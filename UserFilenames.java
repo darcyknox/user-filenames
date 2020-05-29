@@ -48,6 +48,7 @@ public class UserFilenames {
     int prevLabDesk = -1;
     int prevJobNumber = -1;
 
+
     for (FileContents f : files) {
 
       String[] split = f.filename.toString().split("-");
@@ -58,15 +59,11 @@ public class UserFilenames {
       boolean match2 = Pattern.compile("^0[1-9]|1[0-9]|2[0-5]$").matcher(split[1].toString()).matches();
       boolean match3 = Pattern.compile("^(0[1-9]|[1-9][0-9])$").matcher(split[2].toString().substring(0, 2)).matches();
 
-      if (split.length != 3) {
-        System.out.println("Invalid: Numbers in file name must be separated by 2 hyphens.");
-        return;
-      }
-      for (int i = f.filename.toString().length() - 1; i > f.filename.toString().length() - 5; i--) {
+      for (int i = f.filename.toString().length() - 1; i > f.filename.toString().length() -5; i--) {
         suffix.append(nameSplit[i]);
-      }
+      }   
 
-      //System.out.println(suffix);
+      System.out.println(suffix.toString());
       //System.out.println("Here");
       //System.out.println(Arrays.toString(split));
       //System.out.println(split[2].replace(".txt", ""));
@@ -76,14 +73,23 @@ public class UserFilenames {
       int jobNumber = Integer.parseInt(split[2].replace(".txt", ""));
 
       if (suffix.toString() != "txt.") {
-        System.out.println("Invalid: files must be .txt files/file names must end in .txt");
-      }
-      if (!match1) {
+        System.out.println("Invalid: filenames must end in .txt");
+        continue;
+      } else if (split.length != 3) {
+        System.out.println("Invalid: Numbers in file name must be separated by 2 hyphens.");
+        continue;
+      } else if (nameSplit.length != 11){
+        System.out.println("Invalid: Filename must be exactly 11 characters long.");
+        continue;
+      } else if (!match1) {
         System.out.println("Invaild: job site must be from 01 - 05");
+        continue;
       } else if (!match2) {
         System.out.println("Invaild: lab desk must be from 01 - 25");
+        continue;
       } else if (!match3) {
         System.out.println("Invaild: job number must be from 01 - 99");
+        continue;
       } /*else if (jobNumber != k) {
         System.out.println("Invalid: Non-sequential job number");
       }*/
@@ -167,7 +173,7 @@ public class UserFilenames {
     public Path path;
     public String pathString;
 
-    public FileContents(String filename, String pathString) {
+    public FileContents(String filename, String pathString, ) {
       this.filename = filename;
       this.path = Paths.get(pathString);
       this.pathString = pathString;
