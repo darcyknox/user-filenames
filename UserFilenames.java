@@ -44,9 +44,7 @@ public class UserFilenames {
     dfsFiles(root);
 
     int k = 1;
-    int prevJobSite = -1;
-    int prevLabDesk = -1;
-    int prevJobNumber = -1;
+
 
     for (FileContents f : files) {
 
@@ -71,9 +69,6 @@ public class UserFilenames {
       //System.out.println(Arrays.toString(split));
       //System.out.println(split[2].replace(".txt", ""));
 
-      int jobSite = Integer.parseInt(split[0]);
-      int labDesk = Integer.parseInt(split[1]);
-      int jobNumber = Integer.parseInt(split[2].replace(".txt", ""));
 
       if (suffix.toString() != "txt.") {
         System.out.println("Invalid: files must be .txt files/file names must end in .txt");
@@ -88,29 +83,9 @@ public class UserFilenames {
         System.out.println("Invalid: Non-sequential job number");
       }*/
 
-      // THIS NEEDS TO BE DONE AFTER SORTING
-      if (prevJobSite == -1 && prevLabDesk == -1 && prevJobNumber == -1) {
-        prevJobSite = jobSite;
-        prevLabDesk = labDesk;
-        prevJobNumber = jobNumber;
-      } else {
-        if (jobSite == prevJobSite && labDesk == prevLabDesk) { // if jobSite and labDesk haven't changed
-          if (jobNumber != prevJobNumber + 1) { // if jobNumber is out of sequence
-            System.out.println("Invalid: Non-sequential job number");
-          }
-        } else { // if jobSite and labDesk have changed
-          if (jobNumber != 1) { // jobSite must be 1 to be valid
-            System.out.println("Invalid: Non-sequential job number");
-          }
-        }
-        prevJobSite = jobSite;
-        prevLabDesk = labDesk;
-        prevJobNumber = jobNumber;
+      if (!(f.filename.substring(f.filename.length() - 4, f.filename.length()).equals(".txt"))) {
+        System.out.println(f.filename.substring(f.filename.length() - 4, f.filename.length()));
       }
-
-      k++;
-
-
 
       System.out.println(f.filename);
       System.out.println(f.path);
@@ -125,17 +100,89 @@ public class UserFilenames {
 
     System.out.println("");
 
+    System.out.println();
+
+
+    int prevJobSite = -1;
+    int prevLabDesk = -1;
+    int prevJobNumber = -1;
+
     for (FileContents f : files) {
       System.out.println(f.filename);
       System.out.println(f.path);
+
+      String[] split = f.filename.toString().split("-");
+      //System.out.println(Arrays.toString(split));
+
+      int jobSite = Integer.parseInt(split[0]);
+      int labDesk = Integer.parseInt(split[1]);
+      int jobNumber = Integer.parseInt(split[2].replace(".txt", ""));
+
+      /*
+      System.out.println(prevJobSite);
+      System.out.println(prevLabDesk);
+      System.out.println(prevJobNumber);
+      System.out.println(jobSite);
+      System.out.println(labDesk);
+      System.out.println(jobNumber);
+      */
+
+      if (jobSite < 1 || jobSite > 5) {
+        f.valid = false;
+        System.out.println("Invalid: Job Site out of valid range");
+      } else if (labDesk < 1 || labDesk > 25) {
+        f.valid = false;
+        System.out.println("Invalid: Lab Desk out of valid range");
+      } else if (jobNumber < 1 || jobNumber > 99) {
+        f.valid = false;
+        System.out.println("Invalid: Job Number out of valid range");
+      }
+
+      if (prevJobSite == -1 && prevLabDesk == -1 && prevJobNumber == -1) {
+        prevJobSite = jobSite;
+        prevLabDesk = labDesk;
+        prevJobNumber = jobNumber;
+      } else {
+        if (jobSite == prevJobSite && labDesk == prevLabDesk) { // if jobSite and labDesk haven't changed
+          if (jobNumber != prevJobNumber + 1) { // if jobNumber is out of sequence
+            f.valid = false;
+            System.out.println("Invalid: Non-sequential job number");
+          }
+        } else { // if jobSite and labDesk have changed
+          if (jobNumber != 1) { // jobSite must be 1 to be valid
+            f.valid = false;
+            System.out.println("Invalid: Non-sequential job number");
+          }
+        }
+        prevJobSite = jobSite;
+        prevLabDesk = labDesk;
+        prevJobNumber = jobNumber;
+      }
+
     }
 
+
     System.out.println();
+    //Path result = Paths.get('result.txt');
+
+    /*
+    try (BufferedWriter writer = new BufferedWriter(new FileWriter("result.txt", true));) {
+
+    } catch (IOException e) {
+      System.out.println("error");
+      System.exit(0);
+    }
+    */
+
+    File result = new File("result.txt");
+
 
     for (FileContents f : files) {
       try (BufferedReader br = new BufferedReader(new FileReader(f.pathString))) {
         String line;
         while ((line = br.readLine()) != null) {
+         //Files.write(result, line.getBytes());
+         writeToFile(result, line);
          System.out.println(line);
         }
       } catch (IOException e) {
@@ -143,9 +190,6 @@ public class UserFilenames {
         System.exit(0);
       }
     }
-
-
-
   }
 
   /*
@@ -161,11 +205,17 @@ public class UserFilenames {
   }
   */
 
+  public static void writeToFile(File f, String s) throws IOException {
+    BufferedWriter writer = new BufferedWriter(new FileWriter(f, true));
+    writer.append(s);
+  }
+
   private static class FileContents {
 
     public String filename;
     public Path path;
     public String pathString;
+    public boolean valid = true;
 
     public FileContents(String filename, String pathString) {
       this.filename = filename;
