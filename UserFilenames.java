@@ -25,7 +25,7 @@ public class UserFilenames {
 
   public static void main(String[] args) throws ParseException {
 
-    System.out.println(args[0]);
+    //System.out.println(args[0]);
 
     File root = new File(args[0]);
 
@@ -55,7 +55,7 @@ public class UserFilenames {
 
       if (split.length != 3) {
         f.valid = false;
-        System.out.println("Invalid: Numbers in file name must be separated by 2 hyphens.");
+        System.err.println("Invalid: Numbers in file name must be separated by 2 hyphens.");
         return;
       }
 
@@ -99,15 +99,15 @@ public class UserFilenames {
 
     Collections.sort(files, compareByFileName);
 
-    System.out.println();
+    //System.out.println();
 
     int prevJobSite = -1;
     int prevLabDesk = -1;
     int prevJobNumber = -1;
 
     for (FileContents f : files) {
-      System.out.println(f.filename);
-      System.out.println(f.path);
+      //System.out.println(f.filename);
+      //System.out.println(f.path);
 
       if (f.valid) {
 
@@ -128,13 +128,13 @@ public class UserFilenames {
 
         if (jobSite < 1 || jobSite > 5) {
           f.valid = false;
-          System.out.println(f.filename + " - Invalid: Job Site out of valid range");
+          System.err.println(f.filename + " - Invalid: Job Site out of valid range");
         } else if (labDesk < 1 || labDesk > 25) {
           f.valid = false;
-          System.out.println(f.filename + " - Invalid: Lab Desk out of valid range");
+          System.err.println(f.filename + " - Invalid: Lab Desk out of valid range");
         } else if (jobNumber < 1 || jobNumber > 99) {
           f.valid = false;
-          System.out.println(f.filename + " - Invalid: Job Number out of valid range");
+          System.err.println(f.filename + " - Invalid: Job Number out of valid range");
         }
 
         if (prevJobSite == -1 && prevLabDesk == -1 && prevJobNumber == -1) {
@@ -145,12 +145,12 @@ public class UserFilenames {
           if (jobSite == prevJobSite && labDesk == prevLabDesk) { // if jobSite and labDesk haven't changed
             if (jobNumber != prevJobNumber + 1) { // if jobNumber is out of sequence
               f.valid = false;
-              System.out.println(f.filename + " - Invalid: Non-sequential job number");
+              System.err.println(f.filename + " - Invalid: Non-sequential job number");
             }
           } else { // if jobSite and labDesk have changed
             if (jobNumber != 1) { // jobSite must be 1 to be valid
               f.valid = false;
-              System.out.println(f.filename + " - Invalid: Non-sequential job number");
+              System.err.println(f.filename + " - Invalid: Non-sequential job number");
             }
           }
           prevJobSite = jobSite;
@@ -158,11 +158,11 @@ public class UserFilenames {
           prevJobNumber = jobNumber;
         }
       } else {
-        System.out.println(f.filename + f.errorMessage);
+        System.err.println(f.filename + f.errorMessage);
       }
     }
 
-    System.out.println();
+    //System.out.println();
 
     File result = new File("result.txt");
 
@@ -186,7 +186,7 @@ public class UserFilenames {
       writer.close();
 
     } catch (IOException e) {
-      System.out.println("error");
+      System.err.println("IO Error");
       System.exit(0);
     }
 
