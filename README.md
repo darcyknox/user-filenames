@@ -1,5 +1,7 @@
-# user-filenames
-COSC326 Etude 10
+COSC326 Etude 10 - User Filenames
+
+Darcy Knox 7712753
+William Wallace 1216661
 
 EXPLANATION:
 
@@ -10,5 +12,8 @@ directory structure, assembles a list of files to be read in sequential order, r
 
 HOW TO RUN:
 
-To run the program, first compile the program with the command "javac UserFilenames.java" without quotation marks.
-Next, run the program with the command "java UserFilenames directory-name" without quotation marks, and where directory-name is replaced with the name of a directory.
+To compile, use the command:
+javac UserFilenames.java
+
+Next, run the program with the command:
+java UserFilenames directory-name

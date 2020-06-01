@@ -13,12 +13,14 @@ public class UserFilenames {
 
   public static void dfsFiles(File rootDir) {
     File[] dir = rootDir.listFiles();
-    for (File f : dir) {
-      if (f.isDirectory()) {
-        dfsFiles(f);
-      } else {
-        FileContents fileInstance = new FileContents(f.getName(), f.toString());
-        files.add(fileInstance);
+    if (dir != null) {
+      for (File f : dir) {
+        if (f.isDirectory()) {
+          dfsFiles(f);
+        } else {
+          FileContents fileInstance = new FileContents(f.getName(), f.toString());
+          files.add(fileInstance);
+        }
       }
     }
   }
