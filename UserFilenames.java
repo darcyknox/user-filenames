@@ -3,9 +3,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
-import java.text.SimpleDateFormat;
 import java.text.ParseException;
-import java.util.regex.*;
 
 public class UserFilenames {
 
@@ -27,82 +25,64 @@ public class UserFilenames {
 
   public static void main(String[] args) throws ParseException {
 
-    //System.out.println(args[0]);
-
     File root = new File(args[0]);
-
-    /*
-     * if (args.length < 1) { System.out.println("Invalid: No input");
-     * System.exit(0); }
-     */
-    /*
-     * Scanner scan = null;
-     *
-     * try { scan = new Scanner(new FileInputStream(args[0])); } catch
-     * (FileNotFoundException e) { System.out.println("Invalid: No input");
-     * System.exit(0); }
-     */
 
     dfsFiles(root);
 
     for (FileContents f : files) {
 
       String[] split = f.filename.toString().split("-");
-      String[] nameSplit = f.filename.toString().split("");
-      StringBuilder suffix = new StringBuilder();
-
-      boolean match1 = Pattern.compile("^0[1-5]$").matcher(split[0].toString()).matches();
-      boolean match2 = Pattern.compile("^0[1-9]|1[0-9]|2[0-5]$").matcher(split[1].toString()).matches();
-      boolean match3 = Pattern.compile("^(0[1-9]|[1-9][0-9])$").matcher(split[2].toString().substring(0, 2)).matches();
-
-      if (split.length != 3) {
-        f.valid = false;
-        System.err.println("Invalid: Numbers in file name must be separated by 2 hyphens.");
-        return;
-      }
-
-      /*
-      for (int i = f.filename.toString().length() - 1; i > f.filename.toString().length() - 5; i--) {
-        suffix.append(nameSplit[i]);
-      }
-      */
-
-      //System.out.println(suffix);
-      //System.out.println("Here");
-      //System.out.println(Arrays.toString(split));
-      //System.out.println(split[2].replace(".txt", ""));
-
-      /*
-      if (suffix.toString() != "txt.") {
-        System.out.println("Invalid: files must be .txt files/file names must end in .txt");
-      }
-      if (!match1) {
-        System.out.println("Invaild: job site must be from 01 - 05");
-      } else if (!match2) {
-        System.out.println("Invaild: lab desk must be from 01 - 25");
-      } else if (!match3) {
-        System.out.println("Invaild: job number must be from 01 - 99");
-      }
-      */
 
       // .txt checking
       // if the file doesn't end in .txt
+      /*
       if (!(f.filename.substring(f.filename.length() - 4, f.filename.length()).equals(".txt"))) {
         f.valid = false;
         f.errorMessage = " - Invalid: file must be in .txt format";
         //System.out.println(f.filename.substring(f.filename.length() - 4, f.filename.length()));
       }
+      */
+
+
+      // Get the indeces of the 6 numbers in the filename
+
+      int[] numberIndeces = new int[6];
+      int j = 0;
+      for (int i = 0; i < f.filename.length(); i++) {
+        if (Character.isDigit(f.filename.charAt(i)) && j < numberIndeces.length) {
+          numberIndeces[j] = i;
+          j++;
+        }
+      }
+
+
+      // Create a valid filename to sort by, based on the 3 ID number pairs
+
+      StringBuilder validFilename = new StringBuilder();
+      int k = 0;
+      for (int i: numberIndeces) {
+        if (k == 2 || k == 4) {
+          validFilename.append("-");
+        }
+        k++;
+        validFilename.append(f.filename.charAt(i));
+      }
+      validFilename.append(".txt");
+      f.filename = validFilename.toString();
 
       //System.out.println(f.filename);
       //System.out.println(f.path);
     }
 
+    // Sorting by filename
+
     Comparator<FileContents> compareByFileName = (FileContents f1, FileContents f2) -> f1.filename.compareTo(f2.filename);
 
     Collections.sort(files, compareByFileName);
 
-    //System.out.println();
+    // DON'T ACTUALLY NEED ANY OF THIS
 
+    /*
     int prevJobSite = -1;
     int prevLabDesk = -1;
     int prevJobNumber = -1;
@@ -118,15 +98,6 @@ public class UserFilenames {
         int jobSite = Integer.parseInt(split[0]);
         int labDesk = Integer.parseInt(split[1]);
         int jobNumber = Integer.parseInt(split[2].replace(".txt", ""));
-
-        /*
-        System.out.println(prevJobSite);
-        System.out.println(prevLabDesk);
-        System.out.println(prevJobNumber);
-        System.out.println(jobSite);
-        System.out.println(labDesk);
-        System.out.println(jobNumber);
-        */
 
         if (jobSite < 1 || jobSite > 5) {
           f.valid = false;
@@ -163,24 +134,25 @@ public class UserFilenames {
         System.err.println(f.filename + f.errorMessage);
       }
     }
+    */
 
-    //System.out.println();
+    // Read files and write contents to results.txt
 
     File result = new File("result.txt");
 
     try (BufferedWriter writer = new BufferedWriter(new FileWriter(result));) {
 
-      writer.write("");
+      writer.write(""); //initialise writer contents
 
       for (FileContents f : files) {
         try (BufferedReader br = new BufferedReader(new FileReader(f.pathString))) {
           String line;
+          //System.out.println(f.filename);
           while ((line = br.readLine()) != null) {
            writer.append(line + "\n");
-           //System.out.println(line);
           }
         } catch (IOException e) {
-          System.out.println("error");
+          System.err.println("IO Error");
           System.exit(0);
         }
       }
@@ -199,8 +171,8 @@ public class UserFilenames {
     public String filename;
     public Path path;
     public String pathString;
-    public boolean valid = true;
-    public String errorMessage;
+    //public boolean valid = true;
+    //public String errorMessage;
 
     public FileContents(String filename, String pathString) {
       this.filename = filename;
