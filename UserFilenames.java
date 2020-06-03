@@ -9,6 +9,7 @@ public class UserFilenames {
 
   public static ArrayList<FileContents> files = new ArrayList<FileContents>();
 
+  // Depth first search the root directory and store each file as an object
   public static void dfsFiles(File rootDir) {
     File[] dir = rootDir.listFiles();
     if (dir != null) {
@@ -22,6 +23,7 @@ public class UserFilenames {
       }
     }
   }
+
 
   public static void main(String[] args) throws ParseException {
 
@@ -80,7 +82,9 @@ public class UserFilenames {
 
     Collections.sort(files, compareByFileName);
 
-    // DON'T ACTUALLY NEED ANY OF THIS
+    // MIGHT NOT NEED THIS
+    // Range checking
+    // Sequence checking
 
     /*
     int prevJobSite = -1;
@@ -166,6 +170,7 @@ public class UserFilenames {
 
   }
 
+  // Class for storing file details
   private static class FileContents {
 
     public String filename;
