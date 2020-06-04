@@ -35,17 +35,6 @@ public class UserFilenames {
 
       String[] split = f.filename.toString().split("-");
 
-      // .txt checking
-      // if the file doesn't end in .txt
-      /*
-      if (!(f.filename.substring(f.filename.length() - 4, f.filename.length()).equals(".txt"))) {
-        f.valid = false;
-        f.errorMessage = " - Invalid: file must be in .txt format";
-        //System.out.println(f.filename.substring(f.filename.length() - 4, f.filename.length()));
-      }
-      */
-
-
       // Get the indeces of the 6 numbers in the filename
 
       int[] numberIndeces = new int[6];
