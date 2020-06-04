@@ -46,7 +46,6 @@ public class UserFilenames {
         }
       }
 
-
       // Create a valid filename to sort by, based on the 3 ID number pairs
 
       StringBuilder validFilename = new StringBuilder();
@@ -61,8 +60,6 @@ public class UserFilenames {
       validFilename.append(".txt");
       f.filename = validFilename.toString();
 
-      //System.out.println(f.filename);
-      //System.out.println(f.path);
     }
 
     // Sorting by filename
@@ -70,64 +67,6 @@ public class UserFilenames {
     Comparator<FileContents> compareByFileName = (FileContents f1, FileContents f2) -> f1.filename.compareTo(f2.filename);
 
     Collections.sort(files, compareByFileName);
-
-    // MIGHT NOT NEED THIS
-    // Range checking
-    // Sequence checking
-
-    /*
-    int prevJobSite = -1;
-    int prevLabDesk = -1;
-    int prevJobNumber = -1;
-
-    for (FileContents f : files) {
-      //System.out.println(f.filename);
-      //System.out.println(f.path);
-
-      if (f.valid) {
-
-        String[] split = f.filename.toString().split("-");
-
-        int jobSite = Integer.parseInt(split[0]);
-        int labDesk = Integer.parseInt(split[1]);
-        int jobNumber = Integer.parseInt(split[2].replace(".txt", ""));
-
-        if (jobSite < 1 || jobSite > 5) {
-          f.valid = false;
-          System.err.println(f.filename + " - Invalid: Job Site out of valid range");
-        } else if (labDesk < 1 || labDesk > 25) {
-          f.valid = false;
-          System.err.println(f.filename + " - Invalid: Lab Desk out of valid range");
-        } else if (jobNumber < 1 || jobNumber > 99) {
-          f.valid = false;
-          System.err.println(f.filename + " - Invalid: Job Number out of valid range");
-        }
-
-        if (prevJobSite == -1 && prevLabDesk == -1 && prevJobNumber == -1) {
-          prevJobSite = jobSite;
-          prevLabDesk = labDesk;
-          prevJobNumber = jobNumber;
-        } else {
-          if (jobSite == prevJobSite && labDesk == prevLabDesk) { // if jobSite and labDesk haven't changed
-            if (jobNumber != prevJobNumber + 1) { // if jobNumber is out of sequence
-              f.valid = false;
-              System.err.println(f.filename + " - Invalid: Non-sequential job number");
-            }
-          } else { // if jobSite and labDesk have changed
-            if (jobNumber != 1) { // jobSite must be 1 to be valid
-              f.valid = false;
-              System.err.println(f.filename + " - Invalid: Non-sequential job number");
-            }
-          }
-          prevJobSite = jobSite;
-          prevLabDesk = labDesk;
-          prevJobNumber = jobNumber;
-        }
-      } else {
-        System.err.println(f.filename + f.errorMessage);
-      }
-    }
-    */
 
     // Read files and write contents to results.txt
 
@@ -140,7 +79,6 @@ public class UserFilenames {
       for (FileContents f : files) {
         try (BufferedReader br = new BufferedReader(new FileReader(f.pathString))) {
           String line;
-          //System.out.println(f.filename);
           while ((line = br.readLine()) != null) {
            writer.append(line + "\n");
           }
@@ -165,8 +103,6 @@ public class UserFilenames {
     public String filename;
     public Path path;
     public String pathString;
-    //public boolean valid = true;
-    //public String errorMessage;
 
     public FileContents(String filename, String pathString) {
       this.filename = filename;
